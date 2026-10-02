@@ -1,0 +1,18 @@
+{
+    "id": "virtManager",
+    "name": "Virtual Machine Manager",
+    "description": "Display libvirt/KVM virtual machine status and management controls",
+    "version": "1.0.0",
+    "author": "solax76",
+    "type": "widget",
+    "capabilities": ["dankbar-widget"],
+    "component": "./VirtWidget.qml",
+    "icon": "computer",
+    "settings": "./VirtSettings.qml",
+    "requires_dms": ">=1.2.0",
+    "permissions": [
+        "settings_read",
+        "settings_write",
+        "process"
+    ]
+}
