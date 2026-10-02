@@ -28,7 +28,7 @@ Only the actions available in the current state of the VM are shown.
 ### Manual
 
 ```sh
-git clone <repo-url> ~/.config/DankMaterialShell/plugins/virtManager
+git clone https://github.com/solax76/DmsVirtualManager ~/.config/DankMaterialShell/plugins/virtManager
 # or, for development:
 ln -s "$PWD" ~/.config/DankMaterialShell/plugins/virtManager
 ```
