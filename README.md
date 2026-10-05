@@ -46,19 +46,15 @@ ln -s "$PWD" ~/.config/DankMaterialShell/plugins/virtManager
 
 ## Configuration
 
-- **Libvirt Connection URI** (default `qemu:///system`)
-- **Virsh Binary** (default `virsh`)
-- **Viewer Command** (default `virt-viewer`; `--connect <uri> --wait <vm>` is appended)
-- **Debounce Delay** (default `300ms`)
-- **Background Polling Interval** (default `0` = disabled)
-- **Show VM Details** — vCPU/memory in the subtitle (default on)
-- **Auto-scroll on Expand** (default on)
+- **Viewer Command** (default `virt-viewer --hotkeys=release-cursor=Super_L`; `--connect <uri> --wait <vm>` is appended)
+
+The libvirt connection is fixed to `qemu:///system`.
 
 ## Actions
 
 | Action | virsh command | Available when |
 |---|---|---|
-| Open Viewer | `virt-viewer --connect <uri> --wait <vm>` | always |
+| Open Viewer | `<viewer command> --connect <uri> --wait <vm>` | always |
 | Start / Restore | `start` | shut off (Restore if a saved state exists) |
 | Pause / Resume | `suspend` / `resume` (`dompmwakeup` if PM-suspended) | running / paused |
 | Shut Down | `shutdown` | running |

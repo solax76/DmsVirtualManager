@@ -13,7 +13,7 @@ Item {
             debounceDelay: 300,
             virshBinary: "virsh",
             libvirtUri: "qemu:///system",
-            viewerCommand: "virt-viewer",
+            viewerCommand: "virt-viewer --hotkeys=release-cursor=Super_L",
             pollingInterval: 0
         })
 
@@ -40,12 +40,7 @@ Item {
     property int pollingInterval: defaults.pollingInterval
 
     function loadSettings() {
-        const load = key => PluginService.loadPluginData(pluginId, key) || defaults[key];
-        debounceDelay = load("debounceDelay");
-        virshBinary = load("virshBinary");
-        libvirtUri = load("libvirtUri");
-        viewerCommand = load("viewerCommand");
-        pollingInterval = load("pollingInterval");
+        viewerCommand = PluginService.loadPluginData(pluginId, "viewerCommand") || defaults.viewerCommand;
 
         refresh();
     }

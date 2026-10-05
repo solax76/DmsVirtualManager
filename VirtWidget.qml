@@ -8,8 +8,8 @@ PluginComponent {
     id: root
 
     property var expandedVms: ({})
-    property bool showDetails: pluginData.showDetails ?? true
-    property bool autoScrollOnExpand: pluginData.autoScrollOnExpand ?? true
+    readonly property bool showDetails: true
+    readonly property bool autoScrollOnExpand: true
 
     property string selectedVm: ""
     property int selectedActionIndex: -1
