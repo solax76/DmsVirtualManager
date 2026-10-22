@@ -2,7 +2,7 @@
     "id": "virtManager",
     "name": "Virtual Machine Manager",
     "description": "Display libvirt/KVM virtual machine status and management controls",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "solax76",
     "type": "widget",
     "capabilities": ["dankbar-widget"],

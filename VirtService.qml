@@ -38,9 +38,13 @@ Item {
     property string libvirtUri: defaults.libvirtUri
     property string viewerCommand: defaults.viewerCommand
     property int pollingInterval: defaults.pollingInterval
+    property var favorites: []
+    // Last parsed VM list, kept to re-sort without querying libvirt again.
+    property var lastVms: []
 
     function loadSettings() {
         viewerCommand = PluginService.loadPluginData(pluginId, "viewerCommand") || defaults.viewerCommand;
+        favorites = PluginService.loadPluginData(pluginId, "favorites", []) || [];
 
         refresh();
     }
@@ -199,20 +203,35 @@ Item {
                         vcpus: parseInt(vm.stats["vcpu.current"] ?? "0"),
                         memoryGiB: Math.round(memKiB / 1048576 * 10) / 10
                     };
-                }).sort((a, b) => {
-                    const priority = vm => vm.isRunning ? 1 : (vm.isPaused || vm.isSuspended || vm.isShuttingDown) ? 2 : vm.hasSavedState ? 3 : 4;
-                    const pa = priority(a), pb = priority(b);
-                    if (pa !== pb)
-                        return pa - pb;
-                    return a.name.localeCompare(b.name);
                 });
 
-                updateVms(result, result.filter(vm => vm.isActive).length);
+                lastVms = result;
+                updateVms(sortVms(result), result.filter(vm => vm.isActive).length);
             } catch (e) {
                 console.error("VirtManager: Failed to parse virsh output:", e);
                 updateVms();
             }
         }, 100);
+    }
+
+    // Active VMs first, then favorites, then the others; alphabetical within each group.
+    function sortVms(list) {
+        return list.map(vm => Object.assign({}, vm, {
+                isFavorite: favorites.includes(vm.name)
+            })).sort((a, b) => {
+            const priority = vm => vm.isActive ? 1 : vm.isFavorite ? 2 : 3;
+            const pa = priority(a), pb = priority(b);
+            if (pa !== pb)
+                return pa - pb;
+            return a.name.localeCompare(b.name);
+        });
+    }
+
+    function toggleFavorite(vmName) {
+        const list = favorites.includes(vmName) ? favorites.filter(name => name !== vmName) : [...favorites, vmName];
+        favorites = list;
+        updateVms(sortVms(lastVms), lastVms.filter(vm => vm.isActive).length);
+        PluginService.savePluginData(pluginId, "favorites", list);
     }
 
     function updateVms(vms = [], runningVms = 0) {

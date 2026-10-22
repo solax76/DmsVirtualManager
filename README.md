@@ -18,6 +18,7 @@ Only the actions available in the current state of the VM are shown.
 - Popout listing every VM defined on the libvirt connection, with state, vCPU and memory
 - Per-VM actions: Open Viewer (`virt-viewer`), Start / Restore, Pause / Resume, Shut Down, Reboot, Force Reboot,
   Force Stop, Save State, Discard Saved State
+- Favorites: click the star on a VM to mark it; the list shows active VMs first, then favorites, then the rest (alphabetical within each group)
 - Only the actions available in the current VM state are shown
 - Destructive actions (Force Reboot, Force Stop, Discard Saved State) require a second click
 - Live updates through `virsh event`, optional fallback polling

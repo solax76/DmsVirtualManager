@@ -315,7 +315,7 @@ PluginComponent {
         if (vm.isPaused || vm.isSuspended || vm.isShuttingDown)
             return Theme.warning;
         if (vm.isRunning)
-            return Theme.primary;
+            return Theme.success;
         if (vm.hasSavedState)
             return Theme.secondary;
         return Theme.surfaceText;
@@ -367,8 +367,8 @@ PluginComponent {
         Column {
             anchors.left: vmIcon.right
             anchors.leftMargin: Theme.spacingM
-            anchors.right: expandIcon.left
-            anchors.rightMargin: Theme.spacingM
+            anchors.right: favoriteButton.left
+            anchors.rightMargin: Theme.spacingS
             anchors.verticalCenter: parent.verticalCenter
             spacing: 2
 
@@ -403,6 +403,25 @@ PluginComponent {
             }
         }
 
+        Rectangle {
+            id: favoriteButton
+            width: 32
+            height: 32
+            radius: Theme.cornerRadius
+            color: favoriteMouse.containsMouse ? Theme.surfaceHover : "transparent"
+            anchors.right: expandIcon.left
+            anchors.rightMargin: Theme.spacingXS
+            anchors.verticalCenter: parent.verticalCenter
+
+            DankIcon {
+                anchors.centerIn: parent
+                name: "star"
+                filled: vmData?.isFavorite ?? false
+                size: Theme.iconSize
+                color: vmData?.isFavorite ? Theme.primary : Theme.surfaceVariantText
+            }
+        }
+
         DankIcon {
             id: expandIcon
             name: isExpanded ? "expand_less" : "expand_more"
@@ -421,6 +440,18 @@ PluginComponent {
             onClicked: {
                 root.keyboardNavigationActive = false;
                 vmHeader.clicked();
+            }
+        }
+
+        // Declared after headerMouse so it sits on top and the click does not expand the VM.
+        MouseArea {
+            id: favoriteMouse
+            anchors.fill: favoriteButton
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+                if (vmHeader.vmData)
+                    VirtService.toggleFavorite(vmHeader.vmData.name);
             }
         }
     }
